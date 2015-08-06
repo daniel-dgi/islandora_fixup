@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Schema hook for islandora_fixup.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function islandora_fixup_schema() {
+  $schema['islandora_fixup_list'] = array(
+    'description' => 'List of pids to fixup',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Unique ID',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+      ),
+      'pid' => array(
+        'description' => 'Fedora PID',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'fixed' => array(
+        'description' => 'Integer describing status.  0 is unfixed. 1 is fixed. 2 is error.',
+        'type' => 'int',
+	'default' => 0,
+      ),
+    ),
+    'primary key' => array('id'),
+    'indexes' => array(
+      'index_pid' => array('pid'),
+      'index_fixed' => array('fixed'),
+    ),
+  );
+  return $schema;
+}

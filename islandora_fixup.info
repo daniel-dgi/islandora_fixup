@@ -1,0 +1,6 @@
+name = Islandora Fixup
+description = "Fixup objects in a batch"
+package = Islandora
+version = 7.x-dev
+core = 7.x
+php = 5.3
