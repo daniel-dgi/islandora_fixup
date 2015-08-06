@@ -68,16 +68,28 @@ function islandora_fixup_batch_operation(array &$context) {
   drush_print("LIMIT: $limit");
   drush_print("OFFSET: $offset");
  
-/*
-  $query = "SELECT * FROM islandora_fixup_list WHERE fixed = 0 OFFSET :offset LIMIT :limit";
-  $rows = db_query($query, array(':offset' => $offset, ':limit' => $limit))->fetchAll();
+  $query = "SELECT * FROM islandora_fixup_list WHERE fixed = 0";
+  $rows = db_query_range($query, $offset, $limit)->fetchAll();
 
   foreach ($rows as $row) {
+    try {
+
+    } catch (Exception $e) {
+      db_update('islandora_fixup_list')
+        ->fields(array(
+          'fixed' => 2,
+        ))
+        ->condition('pid', $pid)
+        ->execute();
+    }
     $pid = $row->pid;
     drush_print("WORKING ON $pid");
 
-    islandora_object_load($pid);
+    $obj = islandora_object_load($pid);
     
+    // do something here
+    $obj->label = $obj->label . "!";
+ 
     db_update('islandora_fixup_list')
       ->fields(array(
         'fixed' => 1,
@@ -86,7 +98,6 @@ function islandora_fixup_batch_operation(array &$context) {
       ->execute();
   }
 
-*/
   // Update progress.
   if ($context['sandbox']['total'] == 0) {
     $context['finished'] = 1;
